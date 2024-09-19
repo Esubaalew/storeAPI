@@ -34,6 +34,13 @@ class SubcategoryViewSet(viewsets.ModelViewSet):
         serializer = ItemSerializer(items, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['get'])
+    def brands(self, request, pk=None):
+        subcategory = self.get_object()
+        brands = subcategory.brands.all()
+        serializer = BrandSerializer(brands, many=True)
+        return Response(serializer.data)
+
 
 # Brand ViewSet
 class BrandViewSet(viewsets.ModelViewSet):
@@ -92,5 +99,3 @@ class StockAvailabilityView(viewsets.ReadOnlyModelViewSet):
     queryset = Stock.objects.all()
     serializer_class = StockAvailabilitySerializer
     lookup_field = 'item_id'
-
-

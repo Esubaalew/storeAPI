@@ -21,15 +21,17 @@ class Subcategory(models.Model):
 # Brand model
 class Brand(models.Model):
     name = models.CharField(max_length=255)
+    subcategory = models.ForeignKey(Subcategory, related_name='brands', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return self.name
+        return f"{self.subcategory.name} - {self.name}"
 
 
 # Model under a brand
 class Model(models.Model):
     name = models.CharField(max_length=255)
     brand = models.ForeignKey(Brand, related_name='models', on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(Subcategory, related_name='models', on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return f"{self.brand.name} - {self.name}"

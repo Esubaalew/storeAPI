@@ -5,7 +5,6 @@ from .views import (
     ItemViewSet, StockViewSet, StockAvailabilityView
 )
 
-
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
 router.register(r'subcategories', SubcategoryViewSet)
@@ -13,7 +12,6 @@ router.register(r'brands', BrandViewSet)
 router.register(r'models', ModelViewSet)
 router.register(r'items', ItemViewSet)
 router.register(r'stocks', StockViewSet)
-
 
 urlpatterns = [
     path('items/<int:item_id>/stocks/', StockAvailabilityView.as_view({'get': 'retrieve'}), name='stock-availability'),

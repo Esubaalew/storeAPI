@@ -80,6 +80,15 @@ class ItemViewSet(viewsets.ModelViewSet):
         serializer = StockSerializer(stocks, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        query = request.query_params.get('q', None)
+        if query:
+            items = Item.objects.filter(name__icontains=query)  # Case-insensitive search
+            serializer = ItemSerializer(items, many=True)
+            return Response(serializer.data)
+        return Response({"error": "No search query provided."}, status=400)
+
 
 # Stock ViewSet
 class StockViewSet(viewsets.ModelViewSet):

@@ -27,12 +27,16 @@ class ModelSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(serializers.ModelSerializer):
+    subcategory = serializers.CharField(source='subcategory.name', read_only=True)
+    brand = serializers.CharField(source='brand.name', read_only=True)
+    model = serializers.CharField(source='model.name', read_only=True)
+
     class Meta:
         model = Item
         fields = '__all__'
 
-
 class StockSerializer(serializers.ModelSerializer):
+    item = serializers.CharField(source='item.name', read_only=True)
     class Meta:
         model = Stock
         fields = '__all__'

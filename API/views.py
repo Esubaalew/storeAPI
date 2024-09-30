@@ -2,10 +2,12 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Category, Subcategory, Brand, Model, Item, Stock
+from .models import Category, Subcategory, Brand, Model, Item, Stock, Request, Message
 from .serializers import (
     CategorySerializer, SubcategorySerializer, BrandSerializer, ModelSerializer,
-    ItemSerializer, StockSerializer, StockAvailabilitySerializer
+    ItemSerializer, StockSerializer, StockAvailabilitySerializer, 
+    RequestSerializer,
+      MessageSerializer
 )
 
 
@@ -108,3 +110,27 @@ class StockAvailabilityView(viewsets.ReadOnlyModelViewSet):
     queryset = Stock.objects.all()
     serializer_class = StockAvailabilitySerializer
     lookup_field = 'item_id'
+
+class RequestViewSet(viewsets.ModelViewSet):
+    queryset = Request.objects.all()
+    serializer_class = RequestSerializer
+
+    def update(self, request, pk):
+        # Mark the request as responded
+        request_instance = self.get_object()
+        request_instance.is_responded = True
+        request_instance.save()
+
+        return Response({"status": "Request marked as responded."})
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+    def create(self, request):
+        # Create a new message linked to a request
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)

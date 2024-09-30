@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Subcategory, Brand, Model, Item, Stock
+from .models import Category, Subcategory, Brand, Model, Item, Stock, Request, Message
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -51,3 +51,14 @@ class StockAvailabilitySerializer(serializers.ModelSerializer):
 
     def get_is_available(self, obj):
         return obj.is_available()
+
+
+class RequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Request
+        fields = '__all__'
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'

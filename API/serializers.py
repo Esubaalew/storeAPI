@@ -36,7 +36,7 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StockSerializer(serializers.ModelSerializer):
-    item = serializers.CharField(source='item.name', read_only=True)
+    item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.all())
     class Meta:
         model = Stock
         fields = '__all__'

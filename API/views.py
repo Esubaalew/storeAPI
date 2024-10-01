@@ -128,9 +128,22 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
 
     def create(self, request):
-        # Create a new message linked to a request
+        # Deserialize and validate the incoming data
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
+        # Extract the validated data
+        validated_data = serializer.validated_data
+        request_instance = validated_data.get('request')
+        sender_id = validated_data.get('sender_id')
+
+        
+        if request_instance.user_id == sender_id:
+            
+            request_instance.is_responded = True
+            request_instance.save()
+
+       
         serializer.save()
 
         return Response(serializer.data)
